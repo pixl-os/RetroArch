@@ -980,8 +980,8 @@ static void handshake_password(void *ignore, const char *line)
       netplay_send_flush(&connection->send_packet_buffer, connection->fd, false);
 
 #ifdef HAVE_MENU
-   menu_input_dialog_end();
-   retroarch_menu_running_finished(false);
+   //menu_input_dialog_end();
+   //retroarch_menu_running_finished(false);
 #endif
 }
 #endif
@@ -1208,7 +1208,7 @@ bool netplay_handshake_init(netplay_t *netplay,
    /* If a password is demanded, ask for it */
    else
    {
-      if ((connection->salt = ntohl(header[3])))
+      /*if ((connection->salt = ntohl(header[3])))
       {
 #ifdef HAVE_MENU
          menu_input_ctx_line_t line = {0};
@@ -1219,7 +1219,7 @@ bool netplay_handshake_init(netplay_t *netplay,
          if (!menu_input_dialog_start(&line))
             return false;
 #endif
-      }
+      }*/
 
       if (!netplay_handshake_nick(netplay, connection))
          return false;
@@ -1229,6 +1229,17 @@ bool netplay_handshake_init(netplay_t *netplay,
    connection->mode = NETPLAY_CONNECTION_PRE_NICK;
    *had_input = true;
    netplay_recv_flush(&connection->recv_packet_buffer);
+
+   /* If a password is demanded, ask for it */
+   if (!netplay->is_server && (connection->salt = ntohl(header[3])))
+   {
+      settings_t *settings = config_get_ptr();
+      const char* password = (settings->bools.netplay_start_as_spectator) ?
+                              settings->paths.netplay_spectate_password : settings->paths.netplay_password;
+      handshake_password(NULL, password);
+      netplay_recv_flush(&connection->recv_packet_buffer);
+   }
+
    return true;
 
 error:
