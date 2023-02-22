@@ -8682,7 +8682,7 @@ static void netplay_announce(netplay_t *netplay)
          frontend_architecture_tmp, sizeof(frontend_architecture_tmp));
    if (frontend_drv)
    {
-      snprintf(buf, sizeof(host_room->frontend), "%s %s",
+      snprintf(buf, sizeof(host_room->frontend), "%s %s@PIXL",
          frontend_drv->ident, frontend_architecture_tmp);
       net_http_urlencode(&frontend_ident, buf);
    }
