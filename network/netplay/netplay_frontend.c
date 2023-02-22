@@ -7982,7 +7982,7 @@ static void netplay_announce(netplay_t *netplay)
    if (frontend_drv)
       snprintf(frontend_architecture,
          sizeof(frontend_architecture),
-         "%s %s",
+         "%s %s@PIXL",
          frontend_drv->ident,
          frontend_architecture_tmp);
    else
