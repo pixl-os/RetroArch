@@ -73,6 +73,9 @@ typedef struct
    PFNEGLDESTROYIMAGEKHRPROC peglDestroyImageKHR;
 } vc_ctx_data_t;
 
+static bool gfx_ctx_vc_bind_api(void *data,
+      enum gfx_ctx_api api, unsigned major, unsigned minor);
+
 /* TODO/FIXME - static globals */
 static enum gfx_ctx_api vc_api = GFX_CTX_NONE;
 
