@@ -717,6 +717,7 @@ static bool content_file_load_into_memory(
 
    *data      = NULL;
    *data_size = 0;
+   runloop_state_t *runloop_st                 = runloop_state_get_ptr();
 
    RARCH_LOG("[Content]: %s: \"%s\".\n",
          msg_hash_to_str(MSG_LOADING_CONTENT_FILE), content_path);
@@ -770,6 +771,7 @@ static bool content_file_load_into_memory(
           * actually needed */
          if (content_compressed || has_patch)
          {
+            p_content->pending_rom_crc = false;
             p_content->rom_crc = encoding_crc32(0, content_data,
                   (size_t)content_size);
             RARCH_LOG("[Content]: CRC32: 0x%x.\n",
@@ -784,6 +786,16 @@ static bool content_file_load_into_memory(
       }
       else
          p_content->rom_crc = 0;
+         if(runloop_st) {
+            p_content->pending_rom_crc = false;
+            p_content->rom_crc = runloop_st->name.hash;
+            RARCH_LOG("[CONTENT LOAD MEMORY]: Got hash from command line - 0x%X", runloop_st->name.hash);
+         }
+         else
+         {
+           p_content->rom_crc = 0;
+           RARCH_LOG("[CONTENT LOAD MEMORY]: NO CRC32 available yet");
+         }
    }
 
    *data      = content_data;
@@ -971,6 +983,7 @@ static bool content_file_load(
    size_t i;
    char msg[1024];
    retro_ctx_load_content_info_t load_info;
+   runloop_state_t *runloop_st                 = runloop_state_get_ptr();
    bool used_vfs_fallback_copy                = false;
 #ifdef __WINRT__
    rarch_system_info_t *system                = &runloop_state_get_ptr()->system;
@@ -1122,14 +1135,23 @@ static bool content_file_load(
             if (i == 0)
             {
                /* If we have a media type, ignore CRC32 calculation. */
-               if (first_content_type == RARCH_CONTENT_NONE)
-               {
-                  strlcpy(p_content->pending_rom_crc_path, content_path,
-                        sizeof(p_content->pending_rom_crc_path));
-                  p_content->pending_rom_crc = true;
+               if(runloop_st) {
+                  p_content->pending_rom_crc = false;
+                  p_content->rom_crc = runloop_st->name.hash;
+                  RARCH_LOG("[CONTENT LOAD FILE] Got CRC32 from command line: 0x%X .\n", (unsigned)p_content->rom_crc);
                }
                else
-                  p_content->rom_crc = 0;
+               {
+                  /* If we have a media type, ignore CRC32 calculation. */
+                  if (first_content_type == RARCH_CONTENT_NONE)
+                  {
+                     strlcpy(p_content->pending_rom_crc_path, content_path,
+                           sizeof(p_content->pending_rom_crc_path));
+                     p_content->pending_rom_crc = true;
+                  }
+                  else
+                     p_content->rom_crc = 0;
+               }
             }
          }
       }
