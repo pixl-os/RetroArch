@@ -297,6 +297,7 @@ struct runloop
       char bps[8192];
       char ips[8192];
       char label[8192];
+      uint32_t hash;
    } name;
 
    bool missing_bios;

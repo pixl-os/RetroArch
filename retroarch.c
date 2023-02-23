@@ -282,6 +282,7 @@ enum
    RA_OPT_EOF_EXIT,
    RA_OPT_LOG_FILE,
    RA_OPT_MAX_FRAMES,
+   RA_OPT_HASH,
    RA_OPT_MAX_FRAMES_SCREENSHOT,
    RA_OPT_MAX_FRAMES_SCREENSHOT_PATH,
    RA_OPT_SET_SHADER,
@@ -4296,6 +4297,8 @@ static void retroarch_print_help(const char *arg0)
 
    strlcat(buf, "  -r, --record=FILE              "
          "Path to record video file. Using mkv extension is recommended.\n"
+         "      --hash=HASH                "
+         "Force a ROM hash. Not mandatory.\n"
          "      --recordconfig             "
          "Path to settings used during recording.\n"
          "      --size=WIDTHxHEIGHT        "
@@ -4564,6 +4567,7 @@ static bool retroarch_parse_input_and_config(
       { "ips",                1, NULL, RA_OPT_IPS },
       { "no-patch",           0, NULL, RA_OPT_NO_PATCH },
 #endif
+      { "hash",               1, NULL, RA_OPT_HASH },
       { "detach",             0, NULL, 'D' },
       { "features",           0, NULL, RA_OPT_FEATURES },
       { "subsystem",          1, NULL, RA_OPT_SUBSYSTEM },
@@ -5040,6 +5044,11 @@ static bool retroarch_parse_input_and_config(
 
                configuration_set_string(settings,
                      settings->paths.username, optarg);
+               break;
+
+            case RA_OPT_HASH:
+               sscanf(optarg, "%8X", &runloop_st->name.hash);
+               RARCH_LOG("Got CRC32 from command line: 0x%x .\n", runloop_st->name.hash);
                break;
 
             case RA_OPT_SIZE:
