@@ -3507,6 +3507,14 @@ static bool config_load_file(global_t *global,
       strlcpy(buf, prefix, sizeof(buf));
       strlcat(buf, "_mouse_index", sizeof(buf));
       CONFIG_GET_INT_BASE(conf, settings, uints.input_mouse_index[i], buf);
+
+      char formatted_number[4];
+      formatted_number[0] = '\0';
+      snprintf(formatted_number, sizeof(formatted_number), "%u", i + 1);
+      strlcpy(buf, "input_libretro_device_p",  sizeof(buf));
+      strlcat(buf, formatted_number,           sizeof(buf));
+      CONFIG_GET_INT_BASE(conf, settings, uints.input_libretro_device[i], buf);
+
    }
 
    /* LED map for use by the led driver */
