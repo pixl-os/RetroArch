@@ -548,7 +548,7 @@ static void input_autoconfigure_connect_handler(retro_task_t *task)
       }
       /* Device is autoconfigured, but a (most likely
        * incorrect) fallback definition was used... */
-      else
+      /*else
       {
          size_t _len        = strlcpy(task_title,
                device_display_name, sizeof(task_title));
@@ -561,10 +561,10 @@ static void input_autoconfigure_connect_handler(retro_task_t *task)
          strlcat(task_title,
                msg_hash_to_str(MSG_DEVICE_NOT_CONFIGURED_FALLBACK),
                sizeof(task_title));
-      }
+      }*/
    }
    /* Autoconfig failed */
-   else
+   /*else
    {
       size_t _len        = strlcpy(task_title,
             device_display_name, sizeof(task_title));
@@ -577,7 +577,7 @@ static void input_autoconfigure_connect_handler(retro_task_t *task)
       strlcat(task_title,
             msg_hash_to_str(MSG_DEVICE_NOT_CONFIGURED),
             sizeof(task_title));
-   }
+   }*/
 
    /* Update task title */
    task_free_title(task);
