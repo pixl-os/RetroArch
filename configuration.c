@@ -3732,6 +3732,13 @@ static bool config_load_file(global_t *global,
 
          strlcpy(buf + _len2, "_analog_dpad_mode", sizeof(buf) - _len2);
          CONFIG_GET_INT_BASE(conf, settings, uints.input_analog_dpad_mode[i], buf);
+
+         char formatted_number[4];
+         formatted_number[0] = '\0';
+         snprintf(formatted_number, sizeof(formatted_number), "%u", i + 1);
+         strlcpy(buf, "input_libretro_device_p",  sizeof(buf));
+         strlcat(buf, formatted_number,           sizeof(buf));
+         CONFIG_GET_INT_BASE(conf, settings, uints.input_libretro_device[i], buf);
       }
    }
 
