@@ -8158,6 +8158,7 @@ bool menu_driver_iterate(
 
 bool menu_input_dialog_start_search(void)
 {
+   return false;
    input_driver_state_t *input_st          = input_state_get_ptr();
    settings_t *settings                    = config_get_ptr();
 #ifdef HAVE_ACCESSIBILITY
