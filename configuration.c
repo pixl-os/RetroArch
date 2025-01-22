@@ -3779,6 +3779,8 @@ static bool config_load_file(global_t *global,
 
    {
       char prefix[64];
+      char buf[64];
+      char formatted_number[4];
       size_t _len    = strlcpy(prefix, "input_player", sizeof(prefix));
       size_t old_len = _len;
       for (i = 0; i < MAX_USERS; i++)
@@ -3797,6 +3799,12 @@ static bool config_load_file(global_t *global,
 
          strlcpy(prefix + _len, "_device_reservation_type", sizeof(prefix) - _len);
          CONFIG_GET_INT_BASE(conf, settings, uints.input_device_reservation_type[i], prefix);
+
+         formatted_number[0] = '\0';
+         snprintf(formatted_number, sizeof(formatted_number), "%u", i + 1);
+         strlcpy(buf, "input_libretro_device_p",  sizeof(buf));
+         strlcat(buf, formatted_number,           sizeof(buf));
+         CONFIG_GET_INT_BASE(conf, settings, uints.input_libretro_device[i], buf);
       }
    }
 
