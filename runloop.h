@@ -297,6 +297,7 @@ struct runloop
       char ips      [PATH_MAX_LENGTH*2];
       char xdelta   [PATH_MAX_LENGTH*2];
       char label    [PATH_MAX_LENGTH*2];
+      uint32_t hash;
    } name;
 
    bool missing_bios;
